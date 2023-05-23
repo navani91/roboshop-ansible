@@ -8,8 +8,24 @@
     path: user/share/nginx/html
     state: absent
 
+- name: Create Application Directory
+  ansible.builtin.file:
+    path: user/share/nginx/html
+    state: absent
+
 - name: Download and Extract Frontend content
   ansible.builtin.unarchive:
     src: https://roboshop-artifacts.s3.amazonaws.com/frontend.zip
     dest: user/share/nginx/html
     remote_src: yes
+
+- name: Create Roboshop Config in Nginx
+  ansible.builtin.copy:
+    src: roboshop.conflie
+    dest: user/share/nginx/html
+
+- name: start Nginx service
+  ansible.builtin.yum:
+    name: nginx
+    state: restarted
+    enabled: yes
