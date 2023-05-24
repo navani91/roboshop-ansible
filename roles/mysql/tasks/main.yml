@@ -1,0 +1,22 @@
+- name: Setup MYSQL rEPO
+  ansible.builtin.COPY:
+    SRC: MYSQL.REPO
+    DEST: /etc/yum.repos.d/mysql.repo
+
+- name: Disable MYSQL 8
+  ansible.builtin.shell: dnf module disable mysql -y
+
+- name: Install MYSQL 5.7
+  ansible.builtin.yum:
+    name: mysql.community.server
+    state: Installed
+
+- name: Start MYSQL Service
+  ansible.builtin.systemd:
+    name: mysqld
+    state: started
+    ensbled: yes
+
+- name: Set Root Password
+  ansible.builtin.shell: mysql_secure_installation --set-root-pass RoboShop@1
+  ignore_error: Yes
